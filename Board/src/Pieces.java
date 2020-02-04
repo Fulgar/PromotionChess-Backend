@@ -1,8 +1,15 @@
+import java.util.ArrayList;
+
 public abstract class Pieces {
     String type, color;
-    int score;
+    // int score;
     String moves[];
     int[] positionOnBoard; // Possibly make a position class or get position from the board
 
-    public abstract Board[] getPossibleMoves(Board currentBoard);
+    public Pieces(String t, String c){
+        type = t;
+        color = c;
+    }
+
+    public abstract ArrayList<Board> getPossibleMoves(Board currentBoard);
 }

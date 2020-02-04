@@ -3,6 +3,11 @@ public class Board {
     int score;
     String fenString;
 
+    public Board(String fen){
+        // Create board from fenstring;
+
+    }
+
     public boolean isPiece(){
         return true;
     }
