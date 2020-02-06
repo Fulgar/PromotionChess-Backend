@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public abstract class Pieces {
+public class Pieces {
     String type, color;
     // int score;
     String moves[];
@@ -11,5 +11,9 @@ public abstract class Pieces {
         color = c;
     }
 
-    public abstract ArrayList<Board> getPossibleMoves(Board currentBoard);
+    public ArrayList<Board> getPossibleMoves(Board currentBoard){
+        ArrayList<Board> boards = new ArrayList<Board>();
+        // Add switch for each of the possible moves for the piece to generate all possible boards.
+        return boards;
+    }
 }
