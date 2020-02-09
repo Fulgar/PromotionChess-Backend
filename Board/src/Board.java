@@ -3,7 +3,7 @@ public class Board {
     int score;
     String fenString;
 
-    public Board(String fen){
+    public Board(String fen){ // Need to intake fenstring, Current color turn char, Bottom color char(Player Color), and Depth int
         // Create board from fenstring;
 
     }
