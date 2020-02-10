@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
-public class KingPiece extends Pieces {
-    public KingPiece(String t, String c){
-        super(t, c, 1);
+public class QueenPiece extends Pieces {
+    public QueenPiece(String t, String c){
+        super(t, c, 8);
         moves = new String[]{"N", "S", "E", "W", "NE", "NW", "SE", "SW"};
     }
 }
