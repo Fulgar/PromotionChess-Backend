@@ -16,7 +16,7 @@ public class Pieces {
 
     public ArrayList<Board> getPossibleMoves(Board currentBoard){
         ArrayList<Board> boards = new ArrayList<Board>();
-        // Add switch for each of the possible moves for the piece to generate all possible boards.
+        // This will generate all possible boards and add them to the ArrayList to be returned.
         for (String move: moves) {
             switch (move){
                 case "N": break;

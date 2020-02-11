@@ -8,11 +8,15 @@ public class Board {
 
     }
 
+    public Board(Board b, BoardPosition oldPos, BoardPosition newPos){ // Incoming board, old position and new position
+        // Check if this is an attack and call capture?
+    }
+
     public boolean isPiece(){
         return true;
     }
 
-    //public void Capture(){}
+    private void Capture(){}
 
     public String createFenString(){
         String fen = "";
