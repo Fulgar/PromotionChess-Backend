@@ -5,12 +5,13 @@ public class Pieces {
     // int score;
     int speed;
     String moves[];
-    int[] positionOnBoard; // Possibly make a position class or get position from the board
+    BoardPosition bp;
 
-    public Pieces(String t, String c, int s){
+    public Pieces(String t, String c, int s, int r, int col){
         type = t;
         color = c;
         speed = s;
+        bp = new BoardPosition(r, col);
     }
 
     public ArrayList<Board> getPossibleMoves(Board currentBoard){
