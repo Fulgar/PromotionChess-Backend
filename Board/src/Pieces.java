@@ -5,7 +5,7 @@ public class Pieces {
     Boolean isWhite;
     // int score;
     int speed;
-    String moves[];
+    BoardPosition moves[];
     BoardPosition bp;
 
     public Pieces(String t, Boolean isWhite, int s, int r, int col){

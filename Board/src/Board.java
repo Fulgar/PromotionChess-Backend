@@ -1,9 +1,12 @@
+import score.ChessType;
+
 import java.util.Hashtable;
 
 public class Board {
     Pieces[][] board = new Pieces[8][8];
     int score;
     String fenString;
+    boolean isWhiteMove;
     Hashtable<String,Number> captureOrder = new Hashtable<>();
 
 
@@ -17,9 +20,7 @@ public class Board {
         captureOrder.put("Bishop",3);
         captureOrder.put("Knight",4);
         captureOrder.put("Queen",5);
-
-
-        //ToDo reg[1] holds the value for who's move it is
+        isWhiteMove = reg[1].equals("w");
         for (int i = 0; i < reg[0].length(); i++) {
             switch (reg[0].charAt(i)) {
                 case 'P':
