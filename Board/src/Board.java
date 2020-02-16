@@ -23,51 +23,51 @@ public class Board {
         for (int i = 0; i < reg[0].length(); i++) {
             switch (reg[0].charAt(i)) {
                 case 'P':
-                    board[currentColumn][currentRow] = new PawnPiece(true, currentRow, currentColumn);
+                    board[currentRow][currentColumn] = new PawnPiece(true, currentRow, currentColumn);
                     currentColumn++;
                     break;
                 case 'p':
-                    board[currentColumn][currentRow] = new PawnPiece(false, currentRow, currentColumn);
+                    board[currentRow][currentColumn] = new PawnPiece(false, currentRow, currentColumn);
                     currentColumn++;
                     break;
                 case 'R':
-                    board[currentColumn][currentRow] = new RookPiece(true, currentRow, currentColumn);
+                    board[currentRow][currentColumn] = new RookPiece(true, currentRow, currentColumn);
                     currentColumn++;
                     break;
                 case 'r':
-                    board[currentColumn][currentRow] = new RookPiece(false, currentRow, currentColumn);
+                    board[currentRow][currentColumn] = new RookPiece(false, currentRow, currentColumn);
                     currentColumn++;
                     break;
                 case 'N':
-                    board[currentColumn][currentRow] = new KnightPiece(true, currentRow, currentColumn);
+                    board[currentRow][currentColumn] = new KnightPiece(true, currentRow, currentColumn);
                     currentColumn++;
                     break;
                 case 'n':
-                    board[currentColumn][currentRow] = new KnightPiece(false, currentRow, currentColumn);
+                    board[currentRow][currentColumn] = new KnightPiece(false, currentRow, currentColumn);
                     currentColumn++;
                     break;
                 case 'B':
-                    board[currentColumn][currentRow] = new BishopPiece(true, currentRow, currentColumn);
+                    board[currentRow][currentColumn] = new BishopPiece(true, currentRow, currentColumn);
                     currentColumn++;
                     break;
                 case 'b':
-                    board[currentColumn][currentRow] = new BishopPiece(false, currentRow, currentColumn);
+                    board[currentRow][currentColumn] = new BishopPiece(false, currentRow, currentColumn);
                     currentColumn++;
                     break;
                 case 'Q':
-                    board[currentColumn][currentRow] = new QueenPiece(true, currentRow, currentColumn);
+                    board[currentRow][currentColumn] = new QueenPiece(true, currentRow, currentColumn);
                     currentColumn++;
                     break;
                 case 'q':
-                    board[currentColumn][currentRow] = new QueenPiece(false, currentRow, currentColumn);
+                    board[currentRow][currentColumn] = new QueenPiece(false, currentRow, currentColumn);
                     currentColumn++;
                     break;
                 case 'K':
-                    board[currentColumn][currentRow] = new KingPiece(true, currentRow, currentColumn);
+                    board[currentRow][currentColumn] = new KingPiece(true, currentRow, currentColumn);
                     currentColumn++;
                     break;
                 case 'k':
-                    board[currentColumn][currentRow] = new KingPiece(false, currentRow, currentColumn);
+                    board[currentRow][currentColumn] = new KingPiece(false, currentRow, currentColumn);
                     currentColumn++;
                     break;
                 case '/':
@@ -77,7 +77,7 @@ public class Board {
                 default:
                 {
                     String hold = "" + fen.charAt(i);
-                    currentRow = currentRow + Integer.parseInt(hold);
+                    currentColumn = currentColumn + Integer.parseInt(hold);
                 }
             }
         }
