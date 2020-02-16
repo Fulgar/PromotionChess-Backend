@@ -5,6 +5,10 @@ public class BoardPosition {
         row = r;
         column = c;
     }
+    public BoardPosition(BoardPosition boardPosition){
+        this.row = boardPosition.getRow();
+        this.column = boardPosition.getColumn();
+    }
 
     public int getRow(){
         return row;

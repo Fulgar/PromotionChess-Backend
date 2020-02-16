@@ -1,8 +1,12 @@
 import java.util.ArrayList;
 
 public class QueenPiece extends Pieces {
-    public QueenPiece(String t, String c, int r, int col){
-        super(t, c, 7, r, col);
+    public QueenPiece(Boolean isWhite, int r, int col){
+        super("Queen", isWhite, 7, r, col);
+        moves = new String[]{"N", "S", "E", "W", "NE", "NW", "SE", "SW"};
+    }
+    public QueenPiece(QueenPiece queenPiece) {
+        super(queenPiece.type, queenPiece.isWhite, queenPiece.speed, queenPiece.bp.getRow(), queenPiece.bp.getColumn());
         moves = new String[]{"N", "S", "E", "W", "NE", "NW", "SE", "SW"};
     }
 }

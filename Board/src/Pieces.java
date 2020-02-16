@@ -1,18 +1,21 @@
 import java.util.ArrayList;
 
 public class Pieces {
-    String type, color;
+    String type;
+    Boolean isWhite;
     // int score;
     int speed;
     String moves[];
     BoardPosition bp;
 
-    public Pieces(String t, String c, int s, int r, int col){
+    public Pieces(String t, Boolean isWhite, int s, int r, int col){
         type = t;
-        color = c;
+        this.isWhite = isWhite;
         speed = s;
         bp = new BoardPosition(r, col);
     }
+
+
 
     public ArrayList<Board> getPossibleMoves(Board currentBoard){
         ArrayList<Board> boards = new ArrayList<Board>();
@@ -20,9 +23,11 @@ public class Pieces {
         // This will generate all possible boards and add them to the ArrayList to be returned.
         for (String move: moves) {
             switch (move){
-                case "N":
+                case "Pawn":
                     for(int i = 0; i < bp.getRow(); i++){
                         // Generate all boards north of position
+
+
                     }
                     break;
                 case "S":
