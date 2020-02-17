@@ -21,56 +21,24 @@ public class Pieces {
         ArrayList<Board> boards = new ArrayList<Board>();
         BoardPosition tempBP = new BoardPosition(0, 0);
         // This will generate all possible boards and add them to the ArrayList to be returned.
-        for (String move: moves) {
-            switch (move){
-                case "Pawn":
-                    for(int i = 0; i < bp.getRow(); i++){
-                        // Generate all boards north of position
+        for (BoardPosition move: moves) {
 
+            //is Index out of bounds
+            if ((move.row + bp.row < 0 && move.row + bp.row > 7) || (move.column + bp.column < 0 && move.column + bp.column > 7))
+                continue;
 
-                    }
-                    break;
-                case "S":
-                    for(int i = bp.getRow(); i < 7; i++){
-                        // Generate all boards south of position
-                    }
-                    break;
-                case "E":
-                    for(int i = bp.getColumn(); i < 7; i++){
-                        // East positions
-                    }
-                    break;
-                case "W":
-                    for(int i = 0; i < bp.getColumn(); i++){
-                        // West positions
-                    }
-                    break;
-                case "NE":
-                    tempBP = this.bp;
-                    while(tempBP.getRow() != 0 || tempBP.getColumn() != 7){
-                        // North East positions
-                    }
-                    break;
-                case "NW":
-                    tempBP = this.bp;
-                    while(tempBP.getRow() != 0 || tempBP.getColumn() != 0){
-                        // North West positions
-                    }
-                    break;
-                case "SE":
-                    tempBP = this.bp;
-                    while(tempBP.getRow() != 7 || tempBP.getColumn() != 7){
-                        // South East positions
-                    }
-                    break;
-                case "SW":
-                    tempBP = this.bp;
-                    while(tempBP.getRow() != 7 || tempBP.getColumn() != 0){
-                        // South West positions
-                    }
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + move);
+            //If there is no piece at that location
+            if (currentBoard.board[move.row+ bp.row][move.column+bp.column] == null){
+                boards.add(new Board(currentBoard.createFenString()));
+                boards.get(boards.size() - 1).board[move.row + bp.row][move.column + bp.column] = boards.get(boards.size() - 1).board[bp.row][bp.column];
+                boards.get(boards.size() - 1).board[bp.row][bp.column] = null;
+                boards.get(boards.size() - 1).board[move.row+bp.row][move.column+bp.column].bp = new BoardPosition(move.row+bp.row,move.column+bp.column);
+            //if there is a piece at the location but the piece is the same color
+            }else if (currentBoard.board[move.row+ bp.row][move.column+bp.column].isWhite == this.isWhite)
+                continue;
+            else{//If the piece is an opposing player
+                boards.add(new Board(currentBoard.createFenString()));
+                boards.get(boards.size() - 1).capture(boards.get(boards.size() - 1).board[this.bp.row][this.bp.column], boards.get(boards.size() - 1).board[this.bp.row + move.row][this.bp.column + move.column] );
             }
         }
         return boards;

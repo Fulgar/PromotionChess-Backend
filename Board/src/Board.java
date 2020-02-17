@@ -94,7 +94,7 @@ public class Board {
         return true;
     }
 
-    private <CapturingPiece extends Pieces, CapturedPiece extends Pieces> void Capture(CapturingPiece capturingPiece, CapturedPiece capturedPiece){
+    public <CapturingPiece extends Pieces, CapturedPiece extends Pieces> void capture(CapturingPiece capturingPiece, CapturedPiece capturedPiece){
         //ToDo Should we double check to make sure a piece isnt trying to take its own team's piece?
         //determines the next piece's order
         int newPieceOrder;
