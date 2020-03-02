@@ -1,8 +1,10 @@
-import java.util.ArrayList;
+package pieces;
 
-public class RookPiece extends Pieces {
-    public RookPiece(Boolean isWhite, int r, int col){
-        super("Rook", isWhite, 7, r, col);
+import board.BoardPosition;
+
+public class KingPiece extends Pieces {
+    public KingPiece(Boolean isWhite, int r, int col){
+        super("King", isWhite, 1, r, col);
         updateMovesAndAttack();
     }
 
@@ -10,5 +12,4 @@ public class RookPiece extends Pieces {
         moves = new BoardPosition[]{new BoardPosition(-1,0), new BoardPosition(0,1), new BoardPosition(1,0), new BoardPosition(0,-1)};
         attackablePositions = moves;
     }
-
 }

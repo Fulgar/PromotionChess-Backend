@@ -1,17 +1,41 @@
+package board;
+
+import pieces.*;
 import score.ChessType;
+import score.Score;
 
 import java.util.Hashtable;
 
 public class Board {
-    Pieces[][] board = new Pieces[8][8];
-    int score;
+    public Pieces[][] board = new Pieces[8][8];
+
+    public Score getScore() {
+        return score;
+    }
+    public int getAIScore(){
+        return score.getBlackScore() - score.getWhiteScore();
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
+
+    Score score;
     String fenString;
     boolean isWhiteMove;
     Hashtable<String,Number> captureOrder = new Hashtable<>();
 
 
-    public Board(String fen) { // Need to intake fenstring, Current color turn char, Bottom color char(Player Color), and Depth int
+    public Board(String fen, Score score) { // Need to intake fenstring, Current color turn char, Bottom color char(Player Color), and Depth int
         // Create board from fenstring;
+
+
+        if (score == null)
+            this.score = new Score(this);
+        else
+            this.score = new Score(score);
+
+
         int currentRow = 0;
         int currentColumn = 0;
         String[] reg = fen.split(" ");
@@ -97,37 +121,66 @@ public class Board {
     public <CapturingPiece extends Pieces, CapturedPiece extends Pieces> void capture(CapturingPiece capturingPiece, CapturedPiece capturedPiece){
         //ToDo Should we double check to make sure a piece isnt trying to take its own team's piece?
         //determines the next piece's order
+        if (capturingPiece.getIsWhite()){
+            score.setWhiteScore(score.getWhiteScore() - ChessType.valueOf(capturingPiece.getType()).getValue());
+            score.setBlackScore(score.getBlackScore() - ChessType.valueOf(capturedPiece.getType()).getValue());
+        } else{
+            score.setWhiteScore(score.getWhiteScore() - ChessType.valueOf(capturedPiece.getType()).getValue());
+            score.setBlackScore(score.getBlackScore() - ChessType.valueOf(capturingPiece.getType()).getValue());
+        }
+
         int newPieceOrder;
-        if (captureOrder.get(capturedPiece.type).intValue() >= captureOrder.get(capturingPiece.type).intValue() + 3 )
-            newPieceOrder = captureOrder.get(capturedPiece.type).intValue() - 1;
+        if (captureOrder.get(capturedPiece.getType()).intValue() >= captureOrder.get(capturingPiece.getType()).intValue() + 3 )
+            newPieceOrder = captureOrder.get(capturedPiece.getType()).intValue() - 1;
         else
-            newPieceOrder = captureOrder.get(capturingPiece.type).intValue() + 1;
+            newPieceOrder = captureOrder.get(capturingPiece.getType()).intValue() + 1;
         //sets the captureing pieces old board position to null, and the new position is set the the captured pieces old position.
         switch (newPieceOrder){
             case 2:
                 //its a rook
-                board[capturedPiece.bp.row][capturedPiece.bp.column] = new RookPiece(capturingPiece.isWhite,capturedPiece.bp.row,capturedPiece.bp.getColumn());
-                board[capturingPiece.bp.row][capturingPiece.bp.column] = null;
+                board[capturedPiece.getBp().row][capturedPiece.getBp().column] = new RookPiece(capturingPiece.getIsWhite(),capturedPiece.getBp().row,capturedPiece.getBp().getColumn());
+                board[capturingPiece.getBp().row][capturingPiece.getBp().column] = null;
+                if (capturingPiece.getIsWhite())
+                    score.setWhiteScore(score.getWhiteScore() + ChessType.ROOK.getValue());
+                else
+                    score.setBlackScore(score.getBlackScore() + ChessType.ROOK.getValue());
+
                 break;
             case 3:
                 //its a Bishop
-                board[capturedPiece.bp.row][capturedPiece.bp.column] = new BishopPiece(capturingPiece.isWhite,capturedPiece.bp.row,capturedPiece.bp.getColumn());
-                board[capturingPiece.bp.row][capturingPiece.bp.column] = null;
+                board[capturedPiece.getBp().row][capturedPiece.getBp().column] = new BishopPiece(capturingPiece.getIsWhite(),capturedPiece.getBp().row,capturedPiece.getBp().getColumn());
+                board[capturingPiece.getBp().row][capturingPiece.getBp().column] = null;
+                if (capturingPiece.getIsWhite())
+                    score.setWhiteScore(score.getWhiteScore() + ChessType.BISHOP.getValue());
+                else
+                    score.setBlackScore(score.getBlackScore() + ChessType.BISHOP.getValue());
                 break;
             case 4:
                 //it's a knight
-                board[capturedPiece.bp.row][capturedPiece.bp.column] = new KnightPiece(capturingPiece.isWhite,capturedPiece.bp.row,capturedPiece.bp.getColumn());
-                board[capturingPiece.bp.row][capturingPiece.bp.column] = null;
+                board[capturedPiece.getBp().row][capturedPiece.getBp().column] = new KnightPiece(capturingPiece.getIsWhite(),capturedPiece.getBp().row,capturedPiece.getBp().getColumn());
+                board[capturingPiece.getBp().row][capturingPiece.getBp().column] = null;
+                if (capturingPiece.getIsWhite())
+                    score.setWhiteScore(score.getWhiteScore() + ChessType.KNIGHT.getValue());
+                else
+                    score.setBlackScore(score.getBlackScore() + ChessType.KNIGHT.getValue());
                 break;
             case 5:
                 //its a Queen
-                board[capturedPiece.bp.row][capturedPiece.bp.column] = new QueenPiece(capturingPiece.isWhite,capturedPiece.bp.row,capturedPiece.bp.getColumn());
-                board[capturingPiece.bp.row][capturingPiece.bp.column] = null;
+                board[capturedPiece.getBp().row][capturedPiece.getBp().column] = new QueenPiece(capturingPiece.getIsWhite(),capturedPiece.getBp().row,capturedPiece.getBp().getColumn());
+                board[capturingPiece.getBp().row][capturingPiece.getBp().column] = null;
+                if (capturingPiece.getIsWhite())
+                    score.setWhiteScore(score.getWhiteScore() + ChessType.QUEEN.getValue());
+                else
+                    score.setBlackScore(score.getBlackScore() + ChessType.QUEEN.getValue());
                 break;
             case 1:
                 //It's a pawn
-                board[capturedPiece.bp.row][capturedPiece.bp.column] = new PawnPiece(capturingPiece.isWhite,capturedPiece.bp.row,capturedPiece.bp.getColumn());
-                board[capturingPiece.bp.row][capturingPiece.bp.column] = null;
+                board[capturedPiece.getBp().row][capturedPiece.getBp().column] = new PawnPiece(capturingPiece.getIsWhite(),capturedPiece.getBp().row,capturedPiece.getBp().getColumn());
+                board[capturingPiece.getBp().row][capturingPiece.getBp().column] = null;
+                if (capturingPiece.getIsWhite())
+                    score.setWhiteScore(score.getWhiteScore() + ChessType.PAWN.getValue());
+                else
+                    score.setBlackScore(score.getBlackScore() + ChessType.PAWN.getValue());
                 break;
         }
 
@@ -148,39 +201,39 @@ public class Board {
                     fen.append(count);
                     count = 0;
                 }
-                switch(board[j][i].type){
+                switch(board[j][i].getType()){
                     case "Pawn":
-                        if (board[j][i].isWhite)
+                        if (board[j][i].getIsWhite())
                             fen.append("P");
                         else
                             fen.append("p");
                         break;
                     case "Rook":
-                        if (board[j][i].isWhite)
+                        if (board[j][i].getIsWhite())
                             fen.append("R");
                         else
                             fen.append("r");
                         break;
                     case "Knight":
-                        if (board[j][i].isWhite)
+                        if (board[j][i].getIsWhite())
                             fen.append("N");
                         else
                             fen.append("n");
                         break;
                     case "Bishop":
-                        if (board[j][i].isWhite)
+                        if (board[j][i].getIsWhite())
                             fen.append("B");
                         else
                             fen.append("b");
                         break;
                     case "Queen":
-                        if (board[j][i].isWhite)
+                        if (board[j][i].getIsWhite())
                             fen.append("Q");
                         else
                             fen.append("q");
                         break;
                     case "King":
-                        if (board[j][i].isWhite)
+                        if (board[j][i].getIsWhite())
                             fen.append("K");
                         else
                             fen.append("k");

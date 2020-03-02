@@ -1,4 +1,7 @@
-import java.util.ArrayList;
+package pieces;
+
+
+import board.BoardPosition;
 
 public class BishopPiece extends Pieces {
     public BishopPiece(Boolean isWhite, int r, int col) {

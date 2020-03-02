@@ -1,5 +1,8 @@
+package board;
+
 public class BoardPosition {
-    int row, column;
+    public int row;
+    public int column;
 
     public BoardPosition(int r, int c){
         row = r;

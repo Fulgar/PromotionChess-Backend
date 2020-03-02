@@ -1,4 +1,6 @@
-import java.util.ArrayList;
+package pieces;
+
+import board.BoardPosition;
 
 public class QueenPiece extends Pieces {
     public QueenPiece(Boolean isWhite, int r, int col){

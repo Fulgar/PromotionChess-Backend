@@ -1,12 +1,43 @@
+package pieces;
+
+import board.Board;
+import board.BoardPosition;
+
 import java.util.ArrayList;
 
 public class Pieces {
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     String type;
+
+    public Boolean getIsWhite() {
+        return isWhite;
+    }
+
+    public void setWhite(Boolean white) {
+        isWhite = white;
+    }
+
     Boolean isWhite;
     // int score;
     int speed;
-    BoardPosition moves[];
-    BoardPosition attackablePositions[];
+    BoardPosition[] moves;
+    BoardPosition[] attackablePositions;
+
+    public BoardPosition getBp() {
+        return bp;
+    }
+
+    public void setBp(BoardPosition bp) {
+        this.bp = bp;
+    }
+
     BoardPosition bp;
 
     public Pieces(String t, Boolean isWhite, int s, int r, int col){
@@ -30,7 +61,7 @@ public class Pieces {
                     continue;
                 //If there is no piece at that location
                 if (currentBoard.board[move.row + bp.row][move.column + bp.column] == null) {
-                    boards.add(new Board(currentBoard.createFenString()));
+                    boards.add(new Board(currentBoard.createFenString(), currentBoard.getScore()));
                     boards.get(boards.size() - 1).board[move.row + bp.row][move.column + bp.column] = boards.get(boards.size() - 1).board[bp.row][bp.column];
                     boards.get(boards.size() - 1).board[bp.row][bp.column] = null;
                     boards.get(boards.size() - 1).board[move.row + bp.row][move.column + bp.column].bp = new BoardPosition(move.row + bp.row, move.column + bp.column);
@@ -38,7 +69,7 @@ public class Pieces {
                 } else if (currentBoard.board[move.row + bp.row][move.column + bp.column].isWhite == this.isWhite)
                     continue;
                 else {//If the piece is an opposing player
-                    boards.add(new Board(currentBoard.createFenString()));
+                    boards.add(new Board(currentBoard.createFenString(), currentBoard.getScore()));
                     boards.get(boards.size() - 1).capture(boards.get(boards.size() - 1).board[this.bp.row][this.bp.column], boards.get(boards.size() - 1).board[this.bp.row + move.row][this.bp.column + move.column]);
                 }
             }
@@ -48,7 +79,7 @@ public class Pieces {
                 if ((move.row + bp.row < 0 && move.row + bp.row > 7) || (move.column + bp.column < 0 && move.column + bp.column > 7))
                     continue;
                 if (currentBoard.board[move.row + bp.row][move.column + bp.column] == null) {
-                    boards.add(new Board(currentBoard.createFenString()));
+                    boards.add(new Board(currentBoard.createFenString(), currentBoard.getScore()));
                     boards.get(boards.size() - 1).board[move.row + bp.row][move.column + bp.column] = boards.get(boards.size() - 1).board[bp.row][bp.column];
                     boards.get(boards.size() - 1).board[bp.row][bp.column] = null;
                     boards.get(boards.size() - 1).board[move.row + bp.row][move.column + bp.column].bp = new BoardPosition(move.row + bp.row, move.column + bp.column);
@@ -59,7 +90,7 @@ public class Pieces {
                 if ((attack.row + bp.row < 0 && attack.row + bp.row > 7) || (attack.column + bp.column < 0 && attack.column + bp.column > 7))
                     continue;
                 if ((currentBoard.board[attack.row + bp.row][attack.column + bp.column] != null) && (currentBoard.board[attack.row + bp.row][attack.column + bp.column].isWhite != isWhite)){
-                    boards.add(new Board(currentBoard.createFenString()));
+                    boards.add(new Board(currentBoard.createFenString(),currentBoard.getScore()));
                     boards.get(boards.size() - 1).capture(boards.get(boards.size() - 1).board[this.bp.row][this.bp.column], boards.get(boards.size() - 1).board[this.bp.row + attack.row][this.bp.column + attack.column]);
 
                 }
