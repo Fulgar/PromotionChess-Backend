@@ -9,6 +9,10 @@ import java.util.Hashtable;
 public class Board {
     public Pieces[][] board = new Pieces[8][8];
 
+    public Board() {
+
+    }
+
     public Score getScore() {
         return score;
     }

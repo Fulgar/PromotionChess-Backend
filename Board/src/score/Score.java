@@ -45,14 +45,17 @@ public class Score {
         this.whiteScore = score.whiteScore;
     }
 
-    public Score(){}
+    public Score(int whiteScore, int blackScore){
+        this.blackScore = blackScore;
+        this.whiteScore = whiteScore;
+    }
 
-    public void updateScore(ChessType capturedType) { // update score based off piece thats captured
+    /*public void updateScore(ChessType capturedType) { // update score based off piece thats captured
         this.score += capturedType.getValue();
     }
 
     public int getScore() {
 
         return score;
-    }
+    }*/
 }
