@@ -9,8 +9,8 @@ public class BishopPiece extends Pieces {
         updateMovesAndAttack();
     }
 
-    public void updateMovesAndAttack(){
-        moves = new BoardPosition[]{new BoardPosition(-1,-1), new BoardPosition(-1,1), new BoardPosition(1,-1),new BoardPosition(1,1)};
+    public void updateMovesAndAttack() {
+        moves = new BoardPosition[]{new BoardPosition(-1, -1), new BoardPosition(-1, 1), new BoardPosition(1, -1), new BoardPosition(1, 1)};
         attackablePositions = moves;
     }
 }
