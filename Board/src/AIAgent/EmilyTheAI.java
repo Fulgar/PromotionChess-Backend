@@ -30,12 +30,16 @@ public class EmilyTheAI {
                     board.board) {
                 for (Pieces piece :
                         row) {
+                    if (piece ==null) break;
                     if (piece.getIsWhite() && isMovingPlayerWhite) {
                         for (Board currentPossibleMove :
                                 piece.getPossibleMoves(board)) {
-                            Board eval = minimax(currentPossibleMove, alpha, beta, false, searthDepth--, !isMovingPlayerWhite);
+                            currentPossibleMove.printBoard();
+                            Board eval = minimax(currentPossibleMove, alpha, beta, false, searthDepth- 1, !isMovingPlayerWhite);
                             maxEval = max(maxEval, eval);
                             alpha = max(alpha, eval);
+                            if (beta == null) break;
+                            if (alpha == null) break;
                             if (beta.getAIScore() <= alpha.getAIScore())
                                 break;
                             return maxEval;
@@ -52,10 +56,11 @@ public class EmilyTheAI {
                     board.board) {
                 for (Pieces piece :
                         row) {
+                    if (piece == null) break;
                     if (piece.getIsWhite() && isMovingPlayerWhite) {
                         for (Board currentPossibleMove :
                                 piece.getPossibleMoves(board)) {
-                            Board eval = minimax(currentPossibleMove, alpha, beta, false, searthDepth--, !isMovingPlayerWhite);
+                            Board eval = minimax(currentPossibleMove, alpha, beta, false, searthDepth- 1, !isMovingPlayerWhite);
                             minEval = min(minEval, eval);
                             alpha = min(beta, eval);
                             if (beta.getAIScore() <= alpha.getAIScore())
@@ -71,6 +76,8 @@ public class EmilyTheAI {
     }
 
     private Board min(Board minEval, Board eval) {
+        if (minEval == null) return minEval;
+        if (eval == null) return eval;
         if (minEval.getAIScore() <= eval.getAIScore())
             return minEval;
         else
@@ -78,6 +85,8 @@ public class EmilyTheAI {
     }
 
     private Board max(Board left, Board right) {
+        if (left == null) return right;
+        if (right == null) return left;
         if (left.getAIScore() >= right.getAIScore())
             return left;
         else
