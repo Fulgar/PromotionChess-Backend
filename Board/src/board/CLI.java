@@ -13,7 +13,7 @@ public class CLI {
         int rowCoord = 2;
         int colCoord = 3;
         System.out.println("Please input Fen String");
-        Board board = new Board("ppppkppp/pppppppp/8/8/8/PPPPPPPP/PPPPKPPP", null);
+        Board board = new Board("ppppkppp/pppppppp/8/8/8/8/PPPPPPPP/PPPPKPPP", null);
         EmilyTheAI theAI = new EmilyTheAI();
         Board result = theAI.minimax(board,null,null,true,4,true);
         System.out.println("This Board's Score is: " + result.getAIScore());
