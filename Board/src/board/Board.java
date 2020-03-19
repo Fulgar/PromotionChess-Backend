@@ -121,11 +121,11 @@ public class Board {
         //ToDo Should we double check to make sure a piece isnt trying to take its own team's piece?
         //determines the next piece's order
         if (capturingPiece.getIsWhite()){
-            score.setWhiteScore(score.getWhiteScore() - ChessType.valueOf(capturingPiece.getType()).getValue());
-            score.setBlackScore(score.getBlackScore() - ChessType.valueOf(capturedPiece.getType()).getValue());
+            score.setWhiteScore(score.getWhiteScore() - ChessType.valueOf(capturingPiece.getType().toUpperCase()).getValue());
+            score.setBlackScore(score.getBlackScore() - ChessType.valueOf(capturedPiece.getType().toUpperCase()).getValue());
         } else{
-            score.setWhiteScore(score.getWhiteScore() - ChessType.valueOf(capturedPiece.getType()).getValue());
-            score.setBlackScore(score.getBlackScore() - ChessType.valueOf(capturingPiece.getType()).getValue());
+            score.setWhiteScore(score.getWhiteScore() - ChessType.valueOf(capturedPiece.getType().toUpperCase()).getValue());
+            score.setBlackScore(score.getBlackScore() - ChessType.valueOf(capturingPiece.getType().toUpperCase()).getValue());
         }
 
         int newPieceOrder;
@@ -271,6 +271,14 @@ public class Board {
             System.out.println("");
         }
         System.out.println("_____________________________________________");
+    }
+
+    public void copyObjectKeepReference(Board copyFrom){
+        this.score = copyFrom.score;
+        this.board = copyFrom.board;
+        this.isWhiteMove = copyFrom.isWhiteMove;
+        this.fenString = copyFrom.fenString;
+        this.captureOrder = copyFrom.captureOrder;
     }
 
 

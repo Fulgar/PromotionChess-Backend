@@ -15,7 +15,7 @@ public class CLI {
         System.out.println("Please input Fen String");
         Board board = new Board("ppppkppp/pppppppp/8/8/8/8/PPPPPPPP/PPPPKPPP", null);
         EmilyTheAI theAI = new EmilyTheAI();
-        Board result = theAI.minimax(board,null,null,true,4,true);
+        Board result = theAI.minimax(board,new Board(),new Board(),true,4,true);
         System.out.println("This Board's Score is: " + result.getAIScore());
 
         result.printBoard();
