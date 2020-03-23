@@ -193,6 +193,7 @@ public class Board {
 
     }
 
+    // TODO: Bug Exists: 0's are produced in some fen-strings
     //Lowercase is Black
     public String createFenString() {
         StringBuilder fen = new StringBuilder();
@@ -204,7 +205,10 @@ public class Board {
                     isEmpty = true;
                     count++;
                     continue;
-                } else if (isEmpty) {
+                } else if (isEmpty && count != 0) {
+                    fen.append(count);
+                    count = 0;
+                } else if (j == 7 && isEmpty) {
                     fen.append(count);
                     count = 0;
                 }
@@ -247,9 +251,13 @@ public class Board {
                         break;
                 }
             }
-            fen.append("/");
+            if (i != 7)
+            {
+                fen.append("/");
+            }
+
         }
-        fen.append(" " + "w" + "");
+
 
         return fen.toString();
     }
