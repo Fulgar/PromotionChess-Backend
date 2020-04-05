@@ -12,8 +12,7 @@ public class EmilyTheAI {
     private String currentBestMove = null;
 
 
-    public EmilyTheAI() {
-    }
+    public EmilyTheAI() {}
 
 
     public Board minimax(Board board, Board alpha, Board beta, boolean isMaximizingPlayer, int searthDepth, boolean isMovingPlayerWhite) {
@@ -22,7 +21,6 @@ public class EmilyTheAI {
         if (searthDepth == 0) {
             return board;
         }
-
         if (isMaximizingPlayer) {
             Board maxEval = new Board();
             maxEval.setScore(new Score(Integer.MIN_VALUE / 2, Integer.MIN_VALUE / 2));
@@ -34,23 +32,18 @@ public class EmilyTheAI {
                     if (piece.getIsWhite() == isMovingPlayerWhite) {
                         for (Board currentPossibleMove :
                                 piece.getPossibleMoves(board)) {
-                            //currentPossibleMove.printBoard();
                             Board eval = minimax(currentPossibleMove, alpha, beta, false, searthDepth- 1, !isMovingPlayerWhite);
                             maxEval = max(maxEval, eval);
                             alpha.copyObjectKeepReference(max(alpha, eval));
                             if (beta == null) continue;
                             if (alpha == null) continue;
-
                             if (beta.getAIScore() >= alpha.getAIScore()) {
                                 Board pruneNode = new Board();
                                 pruneNode.setScore(new Score(Integer.MIN_VALUE / 2, Integer.MIN_VALUE / 2));
                                 System.out.println("Node Pruned");
-                                return eval;
+                                return pruneNode;
                             }
-
-
                         }
-
                     }
                 }
             }
@@ -86,13 +79,9 @@ public class EmilyTheAI {
                                 Board pruneNode = new Board();
                                 pruneNode.setScore(new Score(Integer.MAX_VALUE/2,Integer.MAX_VALUE/2));
                                 System.out.println("Node Pruned");
-                                return eval;
+                                return beta;
                             }
-
-
-
                         }
-
                     }
                 }
             }
@@ -107,7 +96,6 @@ public class EmilyTheAI {
             }
             return minEval;
         }
-
     }
 
     private Board min(Board minEval, Board eval) {
