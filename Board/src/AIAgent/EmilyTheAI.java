@@ -15,7 +15,7 @@ public class EmilyTheAI {
     public EmilyTheAI() {}
 
 
-    public Board minimax(Board board, Board alpha, Board beta, boolean isMaximizingPlayer, int searthDepth, boolean isMovingPlayerWhite) {
+    public Board minimax(Board board, Board alpha, Board beta, boolean isMaximizingPlayer, int searthDepth, boolean isMovingPlayerWhite, int searthDepthNonChange) {
         Board currentBestMove;
         int bestValue;
         if (searthDepth == 0) {
@@ -23,6 +23,7 @@ public class EmilyTheAI {
         }
         if (isMaximizingPlayer) {
             Board maxEval = new Board();
+            Board eval = new Board();
             maxEval.setScore(new Score(Integer.MIN_VALUE / 2, Integer.MIN_VALUE / 2));
             for (Pieces[] row :
                     board.board) {
@@ -32,20 +33,22 @@ public class EmilyTheAI {
                     if (piece.getIsWhite() == isMovingPlayerWhite) {
                         for (Board currentPossibleMove :
                                 piece.getPossibleMoves(board)) {
-                            Board eval = minimax(currentPossibleMove, alpha, beta, false, searthDepth- 1, !isMovingPlayerWhite);
-                            maxEval = max(maxEval, eval);
+                             eval = minimax(currentPossibleMove, alpha, beta, false, searthDepth- 1, !isMovingPlayerWhite,4);
+                             eval.printBoard();
+                            maxEval.copyObjectKeepReference(max(maxEval, eval));
                             alpha.copyObjectKeepReference(max(alpha, eval));
                             if (beta == null) continue;
                             if (alpha == null) continue;
-                            if (beta.getAIScore() >= alpha.getAIScore()) {
-                                Board pruneNode = new Board();
-                                pruneNode.setScore(new Score(Integer.MIN_VALUE / 2, Integer.MIN_VALUE / 2));
-                                System.out.println("Node Pruned");
-                                return pruneNode;
-                            }
+
                         }
                     }
                 }
+            }
+            if (beta.getAIScore() >= alpha.getAIScore() && searthDepth <= searthDepthNonChange) {
+                Board pruneNode = new Board();
+                pruneNode.setScore(new Score(Integer.MIN_VALUE / 2, Integer.MIN_VALUE / 2));
+                System.out.println("Node Pruned");
+                return pruneNode;
             }
             System.out.println("___________________________________________________________");
             System.out.println("Maximizing move found.");
@@ -70,20 +73,22 @@ public class EmilyTheAI {
                         for (Board currentPossibleMove :
                                 piece.getPossibleMoves(board)) {
                             //currentPossibleMove.printBoard();
-                            Board eval = minimax(currentPossibleMove, alpha, beta, true, searthDepth- 1, !isMovingPlayerWhite);
-                            minEval = min(minEval, eval);
+                            Board eval = minimax(currentPossibleMove, alpha, beta, true, searthDepth- 1, !isMovingPlayerWhite,4);
+                            eval.printBoard();
+                            minEval.copyObjectKeepReference(min(minEval, eval)) ;
                             beta.copyObjectKeepReference(min(beta, eval));
                             if (beta == null) continue;
                             if (alpha == null) continue;
-                            if (beta.getAIScore() >= alpha.getAIScore()){
-                                Board pruneNode = new Board();
-                                pruneNode.setScore(new Score(Integer.MAX_VALUE/2,Integer.MAX_VALUE/2));
-                                System.out.println("Node Pruned");
-                                return beta;
-                            }
+
                         }
                     }
                 }
+            }
+            if (beta.getAIScore() >= alpha.getAIScore() && searthDepth != searthDepthNonChange){
+                Board pruneNode = new Board();
+                pruneNode.setScore(new Score(Integer.MAX_VALUE/2,Integer.MAX_VALUE/2));
+                System.out.println("Node Pruned");
+                return pruneNode;
             }
             System.out.println("___________________________________________________________");
             System.out.println("minimizing move found.");

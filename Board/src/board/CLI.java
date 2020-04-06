@@ -20,7 +20,7 @@ public class CLI {
         tempAlpha.setScore(new Score(Integer.MIN_VALUE/2, Integer.MIN_VALUE/2));
         Board tempBeta = new Board();
         tempBeta.setScore(new Score(Integer.MAX_VALUE/2, Integer.MAX_VALUE/2));
-        Board result = theAI.minimax(board,tempAlpha,tempBeta,true,4,true);
+        Board result = theAI.minimax(board,tempAlpha,tempBeta,true,2,true,2);
         System.out.println("This Board's Score is: " + result.getAIScore());
 
         result.printBoard();
