@@ -1,4 +1,5 @@
 .idea
 PromotionChessBackend.iml
-
+.classpath
 /bin/
+.project

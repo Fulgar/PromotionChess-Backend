@@ -9,7 +9,7 @@ import java.util.Hashtable;
 public class Board {
     public Pieces[][] board = new Pieces[8][8];
     Score score;
-    String fenString;
+    private String fenString;
     boolean isWhiteMove;
     Hashtable<String, Number> captureOrder = new Hashtable<>();
 
@@ -96,6 +96,8 @@ public class Board {
             this.score = new Score(this);
         else
             this.score = new Score(score);
+
+        this.fenString = this.createFenString();
     }
     public Board(Board b, BoardPosition oldPos, BoardPosition newPos) { // Incoming board, old position and new position
         // Check if this is an attack and call capture?
@@ -191,6 +193,11 @@ public class Board {
                 break;
         }
 
+    }
+
+    public void updateFenField()
+    {
+        this.fenString = this.createFenString();
     }
 
     //Lowercase is Black
@@ -289,5 +296,11 @@ public class Board {
         this.captureOrder = copyFrom.captureOrder;
     }
 
-
+    @Override
+    public String toString()
+    {
+        return "Board{" +
+                "fenString='" + fenString + '\'' +
+                '}';
+    }
 }

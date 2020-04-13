@@ -63,18 +63,23 @@ public class Pieces {
                 for (int i = 1; i <= this.speed; i++) {
                     if ((((move.row * i) + bp.row) >= 0 && ((move.row * i) + bp.row) <= 7) && (((move.column * i) + bp.column) >= 0 && ((move.column * i) + bp.column) <= 7)) {
                         //If there is no piece at that location
-
                         if (currentBoard.board[(move.row * i) + bp.row][(move.column * i) + bp.column] == null) {
-                            boards.add(new Board(currentBoard.createFenString(), currentBoard.getScore()));
+                            Board newBoard = new Board(currentBoard.createFenString(), currentBoard.getScore());
+                            newBoard.updateFenField();
+                            boards.add(newBoard);
                             boards.get(boards.size() - 1).board[(move.row * i) + bp.row][(move.column * i) + bp.column] = boards.get(boards.size() - 1).board[bp.row][bp.column];
                             boards.get(boards.size() - 1).board[bp.row][bp.column] = null;
                             boards.get(boards.size() - 1).board[(move.row * i) + bp.row][(move.column * i) + bp.column].bp = new BoardPosition((move.row * i) + bp.row, (move.column * i) + bp.column);
+                            boards.get(boards.size() - 1).updateFenField();
                             //if there is a piece at the location but the piece is the same color
                         } else if (currentBoard.board[(move.row * i) + bp.row][(move.column * i) + bp.column].isWhite == this.isWhite)
                             break;
                         else {//If the piece is an opposing player
-                            boards.add(new Board(currentBoard.createFenString(), currentBoard.getScore()));
+                            Board newBoard = new Board(currentBoard.createFenString(), currentBoard.getScore());
+                            newBoard.updateFenField();
+                            boards.add(newBoard);
                             boards.get(boards.size() - 1).capture(boards.get(boards.size() - 1).board[this.bp.row][this.bp.column], boards.get(boards.size() - 1).board[this.bp.row + (move.row * i)][this.bp.column + (move.column * i)]);
+                            boards.get(boards.size() - 1).updateFenField();
                             break;
                         }
                     }
@@ -86,11 +91,13 @@ public class Pieces {
                 for (int i = 1; i <= this.speed; i++) {
                     if ((((move.row * i) + bp.row) >= 0 && ((move.row * i) + bp.row) <= 7) && (((move.column * i) + bp.column) >= 0 && ((move.column * i) + bp.column) <= 7)) {
                         if (currentBoard.board[(move.row * i) + bp.row][(move.column * i) + bp.column] == null) {
-                            boards.add(new Board(currentBoard.createFenString(), currentBoard.getScore()));
+                            Board newBoard = new Board(currentBoard.createFenString(), currentBoard.getScore());
+                            newBoard.updateFenField();
+                            boards.add(newBoard);
                             boards.get(boards.size() - 1).board[(move.row * i) + bp.row][(move.column * i) + bp.column] = boards.get(boards.size() - 1).board[bp.row][bp.column];
                             boards.get(boards.size() - 1).board[bp.row][bp.column] = null;
                             boards.get(boards.size() - 1).board[(move.row * i) + bp.row][(move.column * i) + bp.column].bp = new BoardPosition((move.row * i) + bp.row, (move.column * i) + bp.column);
-
+                            boards.get(boards.size() - 1).updateFenField();
                         }
                     }
                 }
@@ -98,8 +105,10 @@ public class Pieces {
                     for (int i = 1; i <= this.speed; i++) {
                         if (((attack.row + bp.row) >= 0 && (attack.row + bp.row) <= 7) && ((attack.column + bp.column) >= 0 && (attack.column + bp.column) <= 7)) {
                             if ((currentBoard.board[attack.row + bp.row][attack.column + bp.column] != null) && (currentBoard.board[attack.row + bp.row][attack.column + bp.column].isWhite != isWhite)) {
-                                boards.add(new Board(currentBoard.createFenString(), currentBoard.getScore()));
+                                Board newBoard = new Board(currentBoard.createFenString(), currentBoard.getScore());
+                                boards.add(newBoard);
                                 boards.get(boards.size() - 1).capture(boards.get(boards.size() - 1).board[this.bp.row][this.bp.column], boards.get(boards.size() - 1).board[this.bp.row + attack.row][this.bp.column + attack.column]);
+                                boards.get(boards.size() - 1).updateFenField();
                                 break;
                             }
                         }

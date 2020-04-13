@@ -11,6 +11,7 @@ public class BoardNode
 	private Board board;
 	private int alpha;
 	private int beta;
+	private BoardNode bestBoardNode;
 
 	public BoardNode(BoardNode parentNode, ArrayList<BoardNode> childrenNodes, int heuristic, int depth, Board board, int alpha, int beta)
 	{
@@ -21,6 +22,7 @@ public class BoardNode
 		this.board = board;
 		this.alpha = alpha;
 		this.beta = beta;
+		this.bestBoardNode = null;
 	}
 
 	public BoardNode getParentNode()
@@ -105,5 +107,27 @@ public class BoardNode
 	public void setBeta(int beta)
 	{
 		this.beta = beta;
+	}
+
+	public BoardNode getBestBoardNode()
+	{
+		return bestBoardNode;
+	}
+
+	public void setBestBoardNode(BoardNode bestBoardNode)
+	{
+		this.bestBoardNode = bestBoardNode;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "BoardNode{" +
+				" heuristic=" + heuristic +
+				", depth=" + depth +
+				", board=" + board +
+				", alpha=" + alpha +
+				", beta=" + beta +
+				'}';
 	}
 }
