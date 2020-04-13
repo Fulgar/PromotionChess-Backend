@@ -111,7 +111,7 @@ public class ChessBot
 
 						if (score <= node.getAlpha())
 						{
-							System.out.println("MIN PRUNED");
+							System.out.println(currentDepth + ": MIN PRUNED");
 							return node.getBeta();
 						}
 						if (score < node.getBeta())
@@ -126,7 +126,7 @@ public class ChessBot
 
 		if (node.getBestBoardNode() == null)
 		{
-			System.out.println("NULL NODE: " + node.getBoard().createFenString());
+			System.out.println(currentDepth + ": NULL NODE: " + node.getBoard().createFenString());
 		}
 		return node.getBeta();
 	}
@@ -193,7 +193,7 @@ public class ChessBot
 
 						if (score >= node.getBeta())
 						{
-							System.out.println("MAX PRUNED");
+							System.out.println(currentDepth + ": MAX PRUNED");
 							return node.getBeta();
 						}
 						if (score > node.getAlpha())
@@ -208,7 +208,7 @@ public class ChessBot
 
 		if (node.getBestBoardNode() == null)
 		{
-			System.out.println("NULL NODE: " + node.getBoard().createFenString());
+			System.out.println(currentDepth + ": NULL NODE: " + node.getBoard().createFenString());
 		}
 		return node.getAlpha();
 	}

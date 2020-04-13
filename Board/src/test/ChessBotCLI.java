@@ -12,7 +12,7 @@ public class ChessBotCLI
 		// Minimal branch test fenString: 1p6/P7/8/8/8/8/8/8
 		// Minimal branch test fenString for NPE Error Bug at DEPTH 4: 1p6/8/8/P7/8/8/8/8
 		// Default fenString: ppppkppp/pppppppp/8/8/8/8/PPPPPPPP/PPPPKPPP
-		RESTCallPackage restCallPackage = new RESTCallPackage("1p6/P7/8/8/8/8/8/8", 'b', 4, "white");
+		RESTCallPackage restCallPackage = new RESTCallPackage("1p6/8/8/P7/8/8/8/8", 'b', 4, "white");
 		Board board = new Board(restCallPackage.getFenString(), null);
 		ChessBot theAI = new ChessBot(restCallPackage);
 		Board result = theAI.getBestMoveBoard();
