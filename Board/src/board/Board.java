@@ -11,7 +11,7 @@ public class Board {
     Score score;
     private String fenString;
     boolean isWhiteMove;
-    Hashtable<String, Number> captureOrder = new Hashtable<>();
+    Hashtable<String, Integer> captureOrder = new Hashtable<>();
 
     public Board() {
 
@@ -31,6 +31,7 @@ public class Board {
         captureOrder.put("Bishop", 3);
         captureOrder.put("Knight", 4);
         captureOrder.put("Queen", 5);
+        captureOrder.put("King", 6);
         //isWhiteMove = reg[1].equals("w");
         for (int i = 0; i < reg[0].length(); i++) {
             switch (reg[0].charAt(i)) {
@@ -131,15 +132,17 @@ public class Board {
         }
 
         int newPieceOrder;
+
         if (capturedPiece.getType().equals("King")) {
             //GAME OVER
             newPieceOrder = 7;
-        } else if (captureOrder.get(capturedPiece.getType()).intValue() >= captureOrder.get(capturingPiece.getType()).intValue() + 3)
-            newPieceOrder = captureOrder.get(capturedPiece.getType()).intValue() - 1;
+            // } else if (captureOrder.get(capturedPiece.getType()).intValue() >= captureOrder.get(capturingPiece.getType()).intValue() + 3)
+        } else if (captureOrder.get(capturedPiece.getType()) >= captureOrder.get(capturingPiece.getType()) + 3)
+            newPieceOrder = captureOrder.get(capturedPiece.getType()) - 1;
         else if (!capturingPiece.getType().equals("Queen"))
-            newPieceOrder = captureOrder.get(capturingPiece.getType()).intValue() + 1;
+            newPieceOrder = captureOrder.get(capturingPiece.getType()) + 1;
         else
-            newPieceOrder = captureOrder.get(capturingPiece.getType()).intValue();
+            newPieceOrder = captureOrder.get(capturingPiece.getType());
         //sets the captureing pieces old board position to null, and the new position is set the the captured pieces old position.
         switch (newPieceOrder) {
             case 2:
