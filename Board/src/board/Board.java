@@ -19,10 +19,6 @@ public class Board {
     public Board(String fen, Score score) { // Need to intake fenstring, Current color turn char, Bottom color char(Player Color), and Depth int
         // Create board from fenstring;
 
-
-
-
-
         int currentRow = 0;
         int currentColumn = 0;
         String[] reg = fen.split(" ");
@@ -36,11 +32,21 @@ public class Board {
         for (int i = 0; i < reg[0].length(); i++) {
             switch (reg[0].charAt(i)) {
                 case 'P':
-                    board[currentRow][currentColumn] = new PawnPiece(true, currentRow, currentColumn);
+                    if(currentRow == 0){
+                        board[currentRow][currentColumn] = new QueenPiece(true, currentRow, currentColumn);
+                    }
+                    else {
+                        board[currentRow][currentColumn] = new PawnPiece(true, currentRow, currentColumn);
+                    }
                     currentColumn++;
                     break;
                 case 'p':
-                    board[currentRow][currentColumn] = new PawnPiece(false, currentRow, currentColumn);
+                    if(currentRow == 7){
+                        board[currentRow][currentColumn] = new QueenPiece(false, currentRow, currentColumn);
+                    }
+                    else {
+                        board[currentRow][currentColumn] = new PawnPiece(false, currentRow, currentColumn);
+                    }
                     currentColumn++;
                     break;
                 case 'R':
