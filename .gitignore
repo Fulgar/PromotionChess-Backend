@@ -3,3 +3,4 @@ PromotionChessBackend.iml
 .classpath
 /bin/
 .project
+out/production
