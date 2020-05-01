@@ -2,11 +2,11 @@ package score;
 
 public enum ChessType {
 
-    KING(500),
-    QUEEN(9),
-    KNIGHT(5),
-    BISHOP(3),
-    ROOK(3),
+    KING(Integer.MAX_VALUE- 100000),
+    QUEEN(150),
+    KNIGHT(90),
+    BISHOP(30),
+    ROOK(10),
     PAWN(1);
 
     private int value;

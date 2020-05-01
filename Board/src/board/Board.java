@@ -197,6 +197,15 @@ public class Board {
                 else
                     score.setBlackScore(score.getBlackScore() + ChessType.PAWN.getValue());
                 break;
+            case 7:
+                //It's a king
+                board[capturedPiece.getBp().row][capturedPiece.getBp().column] = new QueenPiece(capturingPiece.getIsWhite(), capturedPiece.getBp().row, capturedPiece.getBp().getColumn());
+                board[capturingPiece.getBp().row][capturingPiece.getBp().column] = null;
+                if (capturingPiece.getIsWhite())
+                    score.setWhiteScore(score.getWhiteScore() + ChessType.KING.getValue());
+                else
+                    score.setBlackScore(score.getBlackScore() + ChessType.KING.getValue());
+                break;
 
             default:
                 break;

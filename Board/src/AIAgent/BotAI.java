@@ -67,7 +67,7 @@ public class BotAI
 
 				if (piece.getIsWhite() == (movingColor == 'w'))
 				{
-					for (Board currentPossibleMoveBoard : piece.getPossibleMoves(boardParent))
+					for (Board currentPossibleMoveBoard : piece.getPossibleMoves(boardParent).getPossibleMoves())
 					{
 						System.out.println(currentPossibleMoveBoard.createFenString());
 						String test = currentPossibleMoveBoard.createFenString();

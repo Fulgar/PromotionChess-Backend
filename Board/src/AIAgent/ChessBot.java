@@ -4,9 +4,12 @@ import board.Board;
 import board.BoardNode;
 import models.RESTCallPackage;
 import pieces.Pieces;
+import pieces.ReturnGetPossibleMoves;
+import score.ChessType;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Stack;
 
 public class ChessBot
 {
@@ -37,8 +40,6 @@ public class ChessBot
 		Board originBoard = new Board(this.restCallPackage.getFenString(), null);
 		originalBoard = originBoard;
 
-		// System.out.println("0: " + this.restCallPackage.getFenString());
-
 		// Initializes root node of minimax tree
 		BoardNode rootNode = new BoardNode(null, null, 0, 0, originBoard, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
@@ -56,7 +57,49 @@ public class ChessBot
 		if (node.getDepth() % 2 == 0)
 		{
 			int score = maxAlpha(node);
-			System.out.println("Heuristic: " + score);
+			if (node.getBoard().getAIScore() != node.getHeuristic())
+			{
+				ArrayList<BoardNode> bestList = new ArrayList<BoardNode>();
+				int bestScore = Integer.MIN_VALUE;
+				BoardNode bestNode = null;
+				for (BoardNode child : node.getChildrenNodes())
+				{
+					// If child score is greater than node score
+					if (node.getHeuristic() > bestScore)
+					{
+						bestList.clear();
+						bestList.add(child);
+
+						bestScore = child.getHeuristic();
+						bestNode = child;
+					}
+					if (bestScore == node.getHeuristic()) {
+						bestList.add(child);
+					}
+				}
+
+				ArrayList<BoardNode> randomBestList = new ArrayList<BoardNode>();
+				int bestStaticScore = Integer.MIN_VALUE;
+				BoardNode bestStaticNode = null;
+				for (BoardNode maxNode : bestList)
+				{
+					// If child score is greater than node score
+					if (node.getBoard().getAIScore() > bestStaticScore)
+					{
+						randomBestList.clear();
+						randomBestList.add(maxNode);
+
+						bestStaticScore = maxNode.getHeuristic();
+						bestStaticNode = maxNode;
+					}
+					if (bestScore == node.getBoard().getAIScore()) {
+						randomBestList.add(maxNode);
+					}
+				}
+
+				Random rand = new Random();
+				node.setBestBoardNode(randomBestList.get(rand.nextInt(randomBestList.size())));
+			}
 			return node.getBestBoardNode();
 		}
 		// If node depth is odd, MINIMIZE
@@ -110,6 +153,7 @@ public class ChessBot
 		// Set initial value to positive infinity
 		node.setHeuristic(Integer.MAX_VALUE);
 
+		Stack<Pieces> nonAttackingPositions = new Stack<>();
 		// Search all possible moves
 		for (Pieces[] row : currentBoard.board)
 		{
@@ -117,24 +161,25 @@ public class ChessBot
 			{
 				// If piece is an empty square, continue through loop
 				if (piece == null) continue;
-				int possibleMovesCount = piece.getPossibleMoves(currentBoard).size();
+				ReturnGetPossibleMoves returnGetPossibleMoves = piece.getPossibleMoves(currentBoard);
+				int possibleMovesCount = returnGetPossibleMoves.getPossibleMoves().size();
 				// If current piece has no moves, continue through loop
 				if (possibleMovesCount == 0)
 				{
-					// Terminal node reached, add score
-					// node.setHeuristic(currentBoard.getAIScore());
-					// return currentBoard.getAIScore();
-					System.out.println(piece.getType() + " : No moves");
+					// No moves for piece
+					continue;
+				}
+
+				if (!returnGetPossibleMoves.isAttacking()) {
+					nonAttackingPositions.push(piece);
 					continue;
 				}
 
 				// If piece == movingColor
 				if (piece.getIsWhite() == (movingColor == 'w'))
 				{
-					for (Board currentPossibleMoveBoard : piece.getPossibleMoves(currentBoard))
+					for (Board currentPossibleMoveBoard : returnGetPossibleMoves.getPossibleMoves())
 					{
-						// System.out.println((currentDepth + 1) + ": " + currentPossibleMoveBoard.createFenString());
-
 						// Creates child node of "node"
 						BoardNode child = new BoardNode(node, null, 0, currentDepth + 1, currentPossibleMoveBoard, node.getAlpha(), node.getBeta());
 						node.addChild(child);
@@ -151,33 +196,84 @@ public class ChessBot
 							node.setHeuristic(childScore);
 							node.setBestBoardNode(child);
 						}
-						if (childScore == node.getHeuristic()) {
-							randomBestList.add(child);
 
-							Random rand = new Random();
-							node.setBestBoardNode(randomBestList.get(rand.nextInt(randomBestList.size())));
-						}
 						// If child score is less than or equal to alpha
 						if (childScore <= node.getAlpha())
 						{
 							// System.out.println(currentDepth + ": MIN PRUNED");
 							return node.getHeuristic();
 						}
+
 						// If child score is less than beta
 						if (childScore < node.getBeta())
 						{
 							node.setBeta(childScore);
-							// System.out.println((currentDepth + ": NEW BETA: " + node.getBeta()));
 						}
+					}
+				}
+
+			}
+		}
+
+		while (!nonAttackingPositions.isEmpty()) {
+			Pieces piece = nonAttackingPositions.pop();
+
+			// If piece is an empty square, continue through loop
+			if (piece == null) continue;
+			ReturnGetPossibleMoves returnGetPossibleMoves = piece.getPossibleMoves(currentBoard);
+			int possibleMovesCount = returnGetPossibleMoves.getPossibleMoves().size();
+			// If current piece has no moves, continue through loop
+			if (possibleMovesCount == 0)
+			{
+				// No moves for piece
+				continue;
+			}
+
+			// If piece == movingColor
+			if (piece.getIsWhite() == (movingColor == 'w'))
+			{
+				for (Board currentPossibleMoveBoard : returnGetPossibleMoves.getPossibleMoves())
+				{
+					// Creates child node of "node"
+					BoardNode child = new BoardNode(node, null, 0, currentDepth + 1, currentPossibleMoveBoard, node.getAlpha(), node.getBeta());
+					node.addChild(child);
+
+					// Obtains child score
+					int childScore = maxAlpha(child);
+
+					// If child score is less than node score
+					if (childScore < node.getHeuristic())
+					{
+						randomBestList.clear();
+						randomBestList.add(child);
+
+						node.setHeuristic(childScore);
+						node.setBestBoardNode(child);
+					}
+					if (nonAttackingPositions.size() == possibleMovesCount)
+					{
+						if (childScore == node.getHeuristic()) {
+							randomBestList.add(child);
+
+							Random rand = new Random();
+							node.setBestBoardNode(randomBestList.get(rand.nextInt(randomBestList.size())));
+						}
+					}
+
+					// If child score is less than or equal to alpha
+					if (childScore <= node.getAlpha())
+					{
+						return node.getHeuristic();
+					}
+
+					// If child score is less than beta
+					if (childScore < node.getBeta())
+					{
+						node.setBeta(childScore);
 					}
 				}
 			}
 		}
-
-//		if (node.getBestBoardNode() == null)
-//		{
-//			System.out.println(currentDepth + ": NULL NODE: " + node.getBoard().createFenString());
-//		}
 
 		// Return best heuristic
 		return node.getHeuristic();
@@ -226,6 +322,8 @@ public class ChessBot
 		// Set initial value to negative infinity
 		node.setHeuristic(Integer.MIN_VALUE);
 
+		Stack<Pieces> nonAttackingPositions = new Stack<>();
+
 		// Search all possible moves
 		for (Pieces[] row : currentBoard.board)
 		{
@@ -233,24 +331,25 @@ public class ChessBot
 			{
 				// If piece is an empty square, continue through loop
 				if (piece == null) continue;
-				int possibleMovesCount = piece.getPossibleMoves(currentBoard).size();
+				ReturnGetPossibleMoves returnGetPossibleMoves = piece.getPossibleMoves(currentBoard);
+				int possibleMovesCount = returnGetPossibleMoves.getPossibleMoves().size();
 				// If current piece has no moves, continue through loop
 				if (possibleMovesCount == 0)
 				{
-					System.out.println(piece.getType() + " : No moves");
-					// Terminal node reached, add score
-					// node.setHeuristic(currentBoard.getAIScore());
-					// return currentBoard.getAIScore();
+					// No moves for piece
+					continue;
+				}
+
+				if (!returnGetPossibleMoves.isAttacking()) {
+					nonAttackingPositions.push(piece);
 					continue;
 				}
 
 				// If piece == movingColor
 				if (piece.getIsWhite() == (movingColor == 'w'))
 				{
-					ArrayList<Board> possibleMoves = piece.getPossibleMoves(currentBoard);
-					for (Board currentPossibleMoveBoard : piece.getPossibleMoves(currentBoard))
+					for (Board currentPossibleMoveBoard : returnGetPossibleMoves.getPossibleMoves())
 					{
-						// System.out.println((currentDepth + 1) + ": " + currentPossibleMoveBoard.createFenString());
 						// Creates child node of "node"
 						BoardNode child = new BoardNode(node, null, 0, currentDepth + 1, currentPossibleMoveBoard, node.getAlpha(), node.getBeta());
 						node.addChild(child);
@@ -261,38 +360,87 @@ public class ChessBot
 						// If child score is greater than node score
 						if (childScore > node.getHeuristic())
 						{
-							randomBestList.clear();
-							randomBestList.add(child);
-
 							node.setHeuristic(childScore);
 							node.setBestBoardNode(child);
 						}
-						if (childScore == node.getHeuristic()) {
-							randomBestList.add(child);
-							Random rand = new Random();
-							node.setBestBoardNode(randomBestList.get(rand.nextInt(randomBestList.size())));
-						}
+
 						// If child score is greater than or equal to beta
 						if (childScore >= node.getBeta())
 						{
 							// System.out.println(currentDepth + ": MAX PRUNED");
 							return node.getHeuristic();
 						}
+
 						// If child score is greater than alpha
 						if (childScore > node.getAlpha())
 						{
 							node.setAlpha(childScore);
-							// System.out.println((currentDepth + ": NEW ALPHA: " + node.getAlpha()));
 						}
 					}
 				}
 			}
 		}
 
-//		if (node.getBestBoardNode() == null)
-//		{
-//			System.out.println(currentDepth + ": NULL NODE: " + node.getBoard().createFenString());
-//		}
+		while (!nonAttackingPositions.isEmpty()) {
+			Pieces piece = nonAttackingPositions.pop();
+
+			// If piece is an empty square, continue through loop
+			if (piece == null) continue;
+			ReturnGetPossibleMoves returnGetPossibleMoves = piece.getPossibleMoves(currentBoard);
+			int possibleMovesCount = returnGetPossibleMoves.getPossibleMoves().size();
+			// If current piece has no moves, continue through loop
+			if (possibleMovesCount == 0)
+			{
+				// No moves for piece
+				continue;
+			}
+
+			// If piece == movingColor
+			if (piece.getIsWhite() == (movingColor == 'w'))
+			{
+				for (Board currentPossibleMoveBoard : returnGetPossibleMoves.getPossibleMoves())
+				{
+					// Creates child node of "node"
+					BoardNode child = new BoardNode(node, null, 0, currentDepth + 1, currentPossibleMoveBoard, node.getAlpha(), node.getBeta());
+					node.addChild(child);
+
+					// Obtains child score
+					int childScore = minBeta(child);
+
+					// If child score is greater than node score
+					if (childScore > node.getHeuristic())
+					{
+						randomBestList.clear();
+						randomBestList.add(child);
+
+						node.setHeuristic(childScore);
+						node.setBestBoardNode(child);
+					}
+					if (nonAttackingPositions.size() == possibleMovesCount)
+					{
+						if (childScore == node.getHeuristic()) {
+							randomBestList.add(child);
+							Random rand = new Random();
+							node.setBestBoardNode(randomBestList.get(rand.nextInt(randomBestList.size())));
+						}
+					}
+					// If child score is greater than or equal to beta
+					if (childScore >= node.getBeta())
+					{
+						// System.out.println(currentDepth + ": MAX PRUNED");
+						return node.getHeuristic();
+					}
+
+					// If child score is greater than alpha
+					if (childScore > node.getAlpha())
+					{
+						node.setAlpha(childScore);
+						// System.out.println((currentDepth + ": NEW ALPHA: " + node.getAlpha()));
+					}
+				}
+			}
+		}
+
 
 		// Return best heuristic
 		return node.getHeuristic();

@@ -32,7 +32,7 @@ public class EmilyTheAI {
                     if (piece == null) continue;
                     if (piece.getIsWhite() == isMovingPlayerWhite) {
                         for (Board currentPossibleMove :
-                                piece.getPossibleMoves(board)) {
+                                piece.getPossibleMoves(board).getPossibleMoves()) {
                              eval = minimax(currentPossibleMove, alpha, beta, false, searthDepth- 1, !isMovingPlayerWhite,4);
                              eval.printBoard();
                             maxEval.copyObjectKeepReference(max(maxEval, eval));
@@ -71,7 +71,7 @@ public class EmilyTheAI {
                     if (piece == null) continue;
                     if (piece.getIsWhite() == isMovingPlayerWhite) {
                         for (Board currentPossibleMove :
-                                piece.getPossibleMoves(board)) {
+                                piece.getPossibleMoves(board).getPossibleMoves()) {
                             //currentPossibleMove.printBoard();
                             Board eval = minimax(currentPossibleMove, alpha, beta, true, searthDepth- 1, !isMovingPlayerWhite,4);
                             eval.printBoard();

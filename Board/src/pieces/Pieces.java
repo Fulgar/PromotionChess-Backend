@@ -52,7 +52,8 @@ public class Pieces {
         this.bp = bp;
     }
 
-    public ArrayList<Board> getPossibleMoves(Board currentBoard) {
+    public ReturnGetPossibleMoves getPossibleMoves(Board currentBoard) {
+        ReturnGetPossibleMoves returnGetPossibleMoves = new ReturnGetPossibleMoves();
         ArrayList<Board> boards = new ArrayList<Board>();
         BoardPosition tempBP = new BoardPosition(0, 0);
         // This will generate all possible boards and add them to the ArrayList to be returned.
@@ -80,12 +81,14 @@ public class Pieces {
                             boards.add(newBoard);
                             boards.get(boards.size() - 1).capture(boards.get(boards.size() - 1).board[this.bp.row][this.bp.column], boards.get(boards.size() - 1).board[this.bp.row + (move.row * i)][this.bp.column + (move.column * i)]);
                             boards.get(boards.size() - 1).updateFenField();
+                            returnGetPossibleMoves.setAttacking(true);
                             break;
                         }
                     }
                 }
             }
-            return boards;
+            returnGetPossibleMoves.setPossibleMoves(boards);
+            return returnGetPossibleMoves;
         } else {//This move piece has cancer and needs to be handled in a special way.
             for (BoardPosition move : moves) {
                 for (int i = 1; i <= this.speed; i++) {
@@ -109,6 +112,7 @@ public class Pieces {
                                 boards.add(newBoard);
                                 boards.get(boards.size() - 1).capture(boards.get(boards.size() - 1).board[this.bp.row][this.bp.column], boards.get(boards.size() - 1).board[this.bp.row + attack.row][this.bp.column + attack.column]);
                                 boards.get(boards.size() - 1).updateFenField();
+                                returnGetPossibleMoves.setAttacking(true);
                                 break;
                             }
                         }
@@ -116,7 +120,8 @@ public class Pieces {
 
                 }
             }
-            return boards;
+            returnGetPossibleMoves.setPossibleMoves(boards);
+            return returnGetPossibleMoves;
         }
 
     }
